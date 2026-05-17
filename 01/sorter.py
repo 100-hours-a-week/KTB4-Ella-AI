@@ -4,6 +4,24 @@ import os
 from classifier import get_category
 from utils import get_files, move_file, print_preview, print_summary
 
+# 건드리면 안 되는 시스템 보호 경로
+PROTECTED_PATHS = [
+    "/Applications",
+    "/System",
+    "/Library",
+    "/usr",
+    "/bin",
+    "/sbin",
+    "/etc",
+    "/private",
+]
+
+def is_protected(path: str) -> bool:
+    """보호된 시스템 경로인지 확인."""
+    for protected in PROTECTED_PATHS:
+        if path.startswith(protected):
+            return True
+    return False
 
 def parse_args():
     """CLI 옵션 정의 및 파싱."""
@@ -31,6 +49,11 @@ def main():
     # 경로 유효성 확인
     if not os.path.isdir(target_path):
         print(f"❌ 오류: '{target_path}' 는 유효한 폴더가 아닙니다.")
+        return
+    
+    # 보호된 시스템 경로 차단
+    if is_protected(target_path):
+        print(f"❌ 오류: '{target_path}' 는 보호된 폴더입니다. 정리할 수 없습니다.")
         return
 
     print(f"\n📂 대상 폴더: {target_path}")
