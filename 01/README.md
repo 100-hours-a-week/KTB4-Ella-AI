@@ -25,12 +25,12 @@
 
 ## 사용법
 
-### 기본 실행 (현재 폴더 정리)
+### 기본 실행 (현재 sorter.py 가 있는 폴더 정리)
 ```bash
 python3 sorter.py
 ```
 
-### 폴더 지정
+### 폴더 지정 (실제로 파일이 이동)
 ```bash
 python3 sorter.py --path ~/Downloads
 ```
