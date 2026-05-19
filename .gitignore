@@ -1,0 +1,43 @@
+# --- Python Bytecode & Cache ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# --- Virtual Environments ---
+.venv/
+venv/
+ENV/
+env/
+.venv/bin/
+.venv/lib/
+
+# --- VS Code Settings ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# --- Environment Variables (Secrets) ---
+.env
+.venv
+*.env
+env.vars
+
+# --- Distribution & Build ---
+build/
+dist/
+*.egg-info/
+
+# --- macOS ---
+.DS_Store
+
+# --- Logs & Coverage ---
+*.log
+.coverage
+htmlcov/
+
+# --- Type Checking ---
+.mypy_cache/
