@@ -41,3 +41,6 @@ htmlcov/
 
 # --- Type Checking ---
 .mypy_cache/
+
+# --- Ignore posts.json ---
+posts.json
