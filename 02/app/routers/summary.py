@@ -2,7 +2,7 @@ import os
 import requests
 from fastapi import APIRouter
 from dotenv import load_dotenv
-from app.database import load_posts
+from app.database import load_posts, load_comments
 
 load_dotenv()  # .env 파일에서 환경변수 불러오기
 
@@ -36,3 +36,15 @@ def summarize_post(post_id: int):
             summary = ask_gemini(prompt)
             return {"summary": summary}
     return {"error": "Post not found"}
+
+# 댓글 목록 요약
+@router.get("/posts/{post_id}/comments/summary")
+def summarize_comments(post_id: int):
+    comments = load_comments(post_id)
+    if not comments:
+        return {"error": "No comments found"}
+    # 댓글 목록을 하나의 텍스트로 합치기
+    comments_text = "\n".join([f"- {c.username}: {c.content}" for c in comments])
+    prompt = f"다음 댓글 목록을 한 문장으로 요약해줘.\n{comments_text}"
+    summary = ask_gemini(prompt)
+    return {"summary": summary}
