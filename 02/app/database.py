@@ -1,18 +1,56 @@
 # 게시글 데이터를 담아두는 리스트
 
-import json
-import os
+from sqlmodel import SQLModel, Field, create_engine, Session, select
+from typing import Optional
 
-DB_FILE = "posts.json"
+DB_FILE = "sqlite:///posts.db"
 
-# JSON 파일에서 게시글 목록 불러오기
+# DB 엔진 생성
+engine = create_engine(DB_FILE)
+
+# 게시글 테이블 모델
+class Post(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str
+    title: str
+    content: str
+
+# DB 초기화 — 테이블이 없으면 생성
+def init_db():
+    SQLModel.metadata.create_all(engine)
+
+# 게시글 목록 불러오기
 def load_posts():
-    if not os.path.exists(DB_FILE):
-        return []
-    with open(DB_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    with Session(engine) as session:
+        return session.exec(select(Post)).all()
 
-# 게시글 목록을 JSON 파일에 저장
-def save_posts(posts):
-    with open(DB_FILE, "w", encoding="utf-8") as f:
-        json.dump(posts, f, ensure_ascii=False, indent=2)
+# 게시글 추가
+def add_post(username: str, title: str, content: str):
+    with Session(engine) as session:
+        post = Post(username=username, title=title, content=content)
+        session.add(post)
+        session.commit()
+        session.refresh(post)
+        return post
+
+# 게시글 수정
+def update_post_db(post_id: int, title: str, content: str):
+    with Session(engine) as session:
+        post = session.get(Post, post_id)
+        if post:
+            post.title = title
+            post.content = content
+            session.commit()
+            session.refresh(post)
+            return post
+        return None
+
+# 게시글 삭제
+def delete_post_db(post_id: int):
+    with Session(engine) as session:
+        post = session.get(Post, post_id)
+        if post:
+            session.delete(post)
+            session.commit()
+            return True
+        return False
