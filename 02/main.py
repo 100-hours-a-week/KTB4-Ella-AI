@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import posts, summary
+from app.routers import posts, summary, comments
 from app.database import init_db
 
 app = FastAPI()
@@ -12,3 +12,6 @@ app.include_router(posts.router)
 
 # 요약 라우터 등록
 app.include_router(summary.router)
+
+# 댓글 라우터 등록
+app.include_router(comments.router)

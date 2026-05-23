@@ -20,3 +20,19 @@ class PostResponse(SQLModel):
     username: str
     title: str
     content: str
+
+# 댓글 생성 요청 바디
+class CommentInput(SQLModel):
+    username: str
+    content: str
+
+# 댓글 수정 요청 바디
+class CommentUpdate(SQLModel):
+    content: str
+
+# 댓글 응답 모델
+class CommentResponse(SQLModel):
+    id: int
+    post_id: int
+    username: str
+    content: str
